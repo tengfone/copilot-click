@@ -27,10 +27,12 @@ from state import State
 COLORS = {
     State.ACTIVE: (0.20, 0.85, 0.40),
     State.WAITING: (1.00, 0.72, 0.20),
+    State.PAUSED: (0.62, 0.42, 0.95),
     State.DISABLED: (1.00, 0.25, 0.25),
 }
 DRY_RUN_ACTIVE = (0.25, 0.60, 1.00)  # blue, so a dry run is never mistaken for a live one
 DISABLED_LABEL = "Auto-click disabled"
+PAUSED_LABEL = "Paused"
 
 
 def pump_runloop(seconds: float = 0.05) -> None:
@@ -114,7 +116,12 @@ class Overlay:
             return
         self._shown = state
         self._view.rgb = DRY_RUN_ACTIVE if (self._dry_run and state is State.ACTIVE) else COLORS[state]
-        self._view.label = DISABLED_LABEL if state is State.DISABLED else ""
+        if state is State.DISABLED:
+            self._view.label = DISABLED_LABEL
+        elif state is State.PAUSED:
+            self._view.label = PAUSED_LABEL
+        else:
+            self._view.label = ""
         self._view.setNeedsDisplay_(True)
         self._window.displayIfNeeded()
 

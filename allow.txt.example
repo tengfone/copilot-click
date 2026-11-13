@@ -1,0 +1,14 @@
+# Allow list for copilot-click.
+# One Python regular expression per line. A live click happens only when the
+# text recognized above the button matches a pattern. Blank lines and lines
+# starting with # are ignored. Invalid patterns are skipped and reported.
+#
+# Copy this file to allow.txt (that copy is gitignored) and keep each pattern
+# specific to a command you are willing to auto-allow. If allow.txt is missing
+# or has no usable patterns, nothing is clicked unless you pass --trust-all.
+#
+# Patterns are searched, not full-matched, unless you anchor them with ^ and $.
+
+^git status$
+^git diff( --stat)?$
+^npm test$

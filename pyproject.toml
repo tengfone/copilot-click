@@ -7,7 +7,9 @@ dependencies = [
     "opencv-python>=5.0.0.93",
     "pillow>=13.0.0",
     "pyautogui>=0.9.54",
-    "pyobjc-framework-cocoa>=12.2.2",
+    "pyobjc-framework-cocoa>=12.2.2; sys_platform == 'darwin'",
+    "pyobjc-framework-Quartz>=12.2.2; sys_platform == 'darwin'",
+    "pyobjc-framework-Vision>=12.2.2; sys_platform == 'darwin'",
 ]
 
 [tool.pytest.ini_options]
