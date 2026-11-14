@@ -7,12 +7,12 @@ from enum import Enum
 class State(Enum):
     ACTIVE = "active"  # an allowed editor is frontmost and being scanned
     WAITING = "waiting"  # running, but another app is in front
-    PAUSED = "paused"  # pause hotkey is held; the scanner does not click
+    PAUSED = "paused"  # paused with the hotkey; the scanner does not click
     DISABLED = "disabled"  # stopped by a corner flick
 
 
 class Status:
-    def __init__(self, front_app: str | None = None) -> None:
+    def __init__(self, front_app: str | None = None, front_pid: int | None = None) -> None:
         self.stop = threading.Event()
         self.scanning = False
         self.paused = False  # written by the hotkey monitor, read by the scanner
@@ -20,6 +20,7 @@ class Status:
         self.clicks = 0  # live clicks made
         self.detections = 0  # buttons seen, including in --dry-run
         self.front_app = front_app  # written by the main thread, read by the scanner
+        self.front_pid = front_pid  # process id of front_app, for window bounds
         self.error: BaseException | None = None
 
     @property
