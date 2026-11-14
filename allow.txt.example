@@ -1,14 +1,29 @@
 # Allow list for copilot-click.
-# One Python regular expression per line. A live click happens only when the
-# text recognized above the button matches a pattern. Blank lines and lines
-# starting with # are ignored. Invalid patterns are skipped and reported.
 #
-# Copy this file to allow.txt (that copy is gitignored) and keep each pattern
-# specific to a command you are willing to auto-allow. If allow.txt is missing
-# or has no usable patterns, nothing is clicked unless you pass --trust-all.
+# Copy to ~/.config/copilot-click/allow.txt and make it private:
+#   mkdir -p ~/.config/copilot-click
+#   cp allow.txt.example ~/.config/copilot-click/allow.txt
+#   chmod 600 ~/.config/copilot-click/allow.txt
 #
-# Patterns are searched, not full-matched, unless you anchor them with ^ and $.
+# One Python regular expression per line. Blank lines and lines starting
+# with # are ignored. The file is re-read whenever it changes.
+#
+# Each pattern must match the WHOLE command (re.fullmatch) after runs of
+# whitespace are collapsed to one space. "git status" allows exactly
+# "git status", not "git status -s" and not "sudo git status". You do not
+# need ^ or $.
+#
+# A command containing ; && || | & ` $( ${ > < \ or a line break is refused
+# even when a pattern matches, unless the line starts with "unsafe:".
+# Patterns that would allow an empty command or something like "rm -rf /"
+# are rejected when the file loads; ".*" and similar wildcards load with a
+# warning. Keep every line as narrow as you can.
 
-^git status$
-^git diff( --stat)?$
-^npm test$
+git status
+git diff( --stat)?
+git log --oneline( -n \d{1,3})?
+npm (run )?test
+pytest( -q)?
+
+# Opt in to a shell operator for one exact command:
+# unsafe:git log --oneline \| head
